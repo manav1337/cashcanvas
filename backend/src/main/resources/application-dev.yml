@@ -1,0 +1,8 @@
+# Local development only. Never reuse this secret anywhere else.
+cashcanvas:
+  jwt:
+    secret: mogzdSJlAdAKadiiiK6/65klKqTociDeW9CtUdMSPd6b/jjiWJ8a7CYT43C1Lq5x
+
+logging:
+  level:
+    com.cashcanvas: DEBUG

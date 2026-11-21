@@ -1,0 +1,13 @@
+# Datasource and Redis come from Testcontainers via @ServiceConnection, not from here.
+cashcanvas:
+  jwt:
+    secret: vddbx3Q/0/KpWuSjuqv1+AnldSp4mlri+PDLQoEMw5WG6pccYNwIFiUU6d32DYb1
+  upload:
+    temp-dir: ${java.io.tmpdir}/cashcanvas-test-uploads
+    # Off in tests: if two Spring test contexts ever exist, the second must not fail the first one's jobs.
+    recover-stale-jobs-on-startup: false
+
+logging:
+  level:
+    com.cashcanvas: DEBUG
+    org.testcontainers: INFO

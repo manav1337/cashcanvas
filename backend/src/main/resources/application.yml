@@ -1,0 +1,66 @@
+spring:
+  application:
+    name: cashcanvas
+  profiles:
+    default: dev
+  datasource:
+    url: ${DB_URL:jdbc:mysql://localhost:3306/cashcanvas?connectionTimeZone=UTC}
+    username: ${DB_USERNAME:cashcanvas}
+    password: ${DB_PASSWORD:cashcanvas}
+  jpa:
+    open-in-view: false
+    hibernate:
+      # Flyway owns the schema. Hibernate never creates or alters tables.
+      ddl-auto: none
+    properties:
+      hibernate:
+        jdbc:
+          time_zone: UTC
+  flyway:
+    enabled: true
+  data:
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}
+      repositories:
+        enabled: false
+  servlet:
+    multipart:
+      max-file-size: 5MB
+      max-request-size: 6MB
+
+server:
+  tomcat:
+    # Read (and discard) oversized uploads so the client gets a clean 413 instead of a reset connection.
+    max-swallow-size: 10MB
+
+cashcanvas:
+  jwt:
+    secret: ${JWT_SECRET:}
+    expiry: 1h
+    issuer: cashcanvas
+  upload:
+    temp-dir: ${UPLOAD_TEMP_DIR:${java.io.tmpdir}/cashcanvas-uploads}
+    max-file-size: 5MB
+    core-pool-size: 2
+    max-pool-size: 4
+    queue-capacity: 10
+    recover-stale-jobs-on-startup: true
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
+
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+
+logging:
+  pattern:
+    level: "%5p [cid=%X{correlationId:-}] [job=%X{uploadId:-}]"
+  level:
+    com.cashcanvas: INFO

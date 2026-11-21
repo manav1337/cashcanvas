@@ -1,0 +1,34 @@
+# Local development: MySQL + Redis only. The app itself is added on Day 6.
+# Credentials here are for your laptop only; production uses environment variables.
+services:
+  mysql:
+    image: mysql:8.4
+    container_name: cashcanvas-mysql
+    environment:
+      MYSQL_DATABASE: cashcanvas
+      MYSQL_USER: cashcanvas
+      MYSQL_PASSWORD: cashcanvas
+      MYSQL_ROOT_PASSWORD: rootpass
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-ucashcanvas", "-pcashcanvas"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  redis:
+    image: redis:7.4-alpine
+    container_name: cashcanvas-redis
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+volumes:
+  mysql-data:
